@@ -1,14 +1,14 @@
-﻿using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
+﻿using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System.Globalization;
 using Microsoft.WindowsAzure.Storage.Shared.Protocol;
-using System.IO;
 
 namespace B2CAzureStorageClient
 {
@@ -28,18 +28,22 @@ namespace B2CAzureStorageClient
                 Console.WriteLine("This tool will upload all contents of a directory to an Azure Blob Storage Container you specify.");
                 Console.WriteLine("It will also enable CORS access from all origins on each of the files.");
                 Console.WriteLine("");
+                
                 Console.WriteLine("Enter your Azure Storage Account name: ");
                 string storageAccountName = Console.ReadLine();
+                
                 Console.WriteLine("Enter your Azure Blob Storage Primary Access Key: ");
                 string storageKey = Console.ReadLine();
+                
                 Console.WriteLine("Enter your Azure Blob Storage Container name: ");
                 string containerName = Console.ReadLine();
+                
                 Console.WriteLine("Enter the path to the directory whose contents you wish to upload: ");
                 string directoryPath = Console.ReadLine();
 
-
                 // Upload File to Blob Storage
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(String.Format(CultureInfo.InvariantCulture, connectionStringTemplate, storageAccountName, storageKey));
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(String.Format(CultureInfo.InvariantCulture, 
+                                                                                                connectionStringTemplate, storageAccountName, storageKey));
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 CloudBlobContainer container = blobClient.GetContainerReference(containerName);
 
@@ -109,6 +113,5 @@ namespace B2CAzureStorageClient
             string extension = relativePathAndFileName.Substring(relativePathAndFileName.IndexOf('.'));
             return MimeTypes.MimeTypeMap.GetMimeType(extension);
         }
-
     }
 }
